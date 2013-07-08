@@ -1,0 +1,17 @@
+A small slick demo.
+
+Run with:
+
+$ sbt run
+
+TODOs:
+
+ * Show more slick features
+   * Use tagged types as way to distinct between IDs
+   * Abstractions over common table columns
+   * Filter methods
+ * Improve names and classes locations
+
+
+
+ Licenced under the Apache 2 licence.
