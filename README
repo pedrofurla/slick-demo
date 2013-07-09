@@ -1,8 +1,12 @@
-A small slick demo.
+A small Scala Slick on-going experiment.
+
+In no way the contents of this project are the canonical way of doing things in Slick.
+
+Notice that I avoid the cake pattern. Part of the credits for this goes to https://github.com/wiltonlazary.
 
 Run with:
 
-$ sbt run
+$ sbt run   # Requires sbt 0.12 or later
 
 TODOs:
 
