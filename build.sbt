@@ -9,7 +9,7 @@ initialCommands in console :=
      |import dataLayer.profile.simple._
      |import slickdemo._
      |import slickdemo.Main._
-     |import slickdemo.Util._
+     |import slickdemo.Macros._
      |//val cm= reflect.runtime.currentMirror
      |//val u = cm.universe
      |//createDb

@@ -29,7 +29,7 @@ object Main {
   }
 
   def sqls = {
-    import Util._
+    import Macros._
 
     def show: PartialFunction[(String, String), Unit] = {
       case (expr, source) => println(s"$expr: \n $source \n ${List.fill(10)("-").mkString} generates")

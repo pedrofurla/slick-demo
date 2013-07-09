@@ -38,15 +38,15 @@ object ApplicationBuild extends Build {
     )
   )
 
-  lazy val makros = Project(
-    id = "makros",
-    base = file("makros"),
+  lazy val macros = Project(
+    id = "macros",
+    base = file("macros"),
     settings = sharedSettings
   )
   lazy val root = Project(
     id = "slick-demo",
     base = file("."),
     settings = sharedSettings
-  ) dependsOn (makros)
+  ) dependsOn (macros)
 }
 
