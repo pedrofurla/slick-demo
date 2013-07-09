@@ -4,7 +4,8 @@ import slickdemo.dal.DAL._
 import dataLayer.profile.simple._
 
 case class Book(id: PK, title: String, synopsis: String) {
-  def authors:List[Author] = Authors.byBook(id.get).list // I know, id.get here is a code smell // TODO
+  //
+  lazy val authors:List[Author] = Authors.byBook(id.get).list // I know, id.get here is a code smell // TODO
 }
 object Book {
   def likeTitle(title:String):List[Book] = Books.likeTitle(title).list
@@ -12,7 +13,7 @@ object Book {
 }
 
 case class Author(id: PK, name: String) {
-  def books:List[Book] = Books.byAuthor(id.get).list // Yeah yeah, smelly // TODO
+  lazy val books:List[Book] = Books.byAuthor(id.get).list // Yeah yeah, smelly // TODO
 }
 object Author {
   def likeName(name: String) = Authors.likeName(name).list
