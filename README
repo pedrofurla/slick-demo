@@ -1,8 +1,10 @@
 A small Scala Slick on-going experiment.
-
+                    ^^^^^^^^^^^^^^^^^^^
 In no way the contents of this project are the canonical way of doing things in Slick.
 
 Notice that I avoid the cake pattern. Part of the credits for this goes to https://github.com/wiltonlazary.
+
+Feedback is very welcome.
 
 Run with:
 
