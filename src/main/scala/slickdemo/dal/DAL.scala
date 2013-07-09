@@ -7,24 +7,38 @@ trait DataLayer {
   val profile: scala.slick.driver.ExtendedProfile
   val database: scala.slick.session.Database
 }
-object DataLayer {
-  val mysql = (scala.slick.driver.MySQLDriver, "com.mysql.jdbc.Driver")
-  val h2 = (scala.slick.driver.H2Driver, "com.mysql.jdbc.Driver")
+
+object Drivers {
+
+  case class Driver(slick: scala.slick.driver.ExtendedProfile, jdbc: String)
+
+  val mysql = Driver(scala.slick.driver.MySQLDriver, "com.mysql.jdbc.Driver")
+  val h2 = Driver(scala.slick.driver.H2Driver, "com.mysql.jdbc.Driver")
+  val postgresql=Driver(scala.slick.driver.PostgresDriver, "org.postgresql.Driver")
+  val access=Driver(scala.slick.driver.AccessDriver, "sun.jdbc.odbc.JdbcOdbcDriver")
+  val sqlserver=Driver(scala.slick.driver.SQLServerDriver, "net.sourceforge.jtds.jdbc.Driver")
+  // Todo Missing:
+  // sqlite
+  // hsqldb
+  // derby
+  // db2 ?
+  // oracle ?
+
 }
 
 class MysqlLayer extends DataLayer {
-  val profile = scala.slick.driver.MySQLDriver
-  val database = profile.simple.Database.forURL(s"jdbc:mysql://localhost/slick-demo?user=root", driver = "com.mysql.jdbc.Driver")
+  val profile = Drivers.mysql.slick
+  val database = profile.simple.Database.forURL(s"jdbc:mysql://localhost/slick-demo?user=root", driver = Drivers.mysql.jdbc)
 }
 
 class H2FileLayer extends DataLayer {
-  val profile = scala.slick.driver.H2Driver
-  val database = profile.simple.Database.forURL("jdbc:h2:tcp://localhost/db/slick-demo;IFEXISTS=TRUE", driver = "org.h2.Driver")
+  val profile = Drivers.h2.slick
+  val database = profile.simple.Database.forURL("jdbc:h2:tcp://localhost/db/slick-demo;IFEXISTS=TRUE", driver = Drivers.h2.jdbc)
 }
 
 class H2Layer extends DataLayer {
-  val profile = scala.slick.driver.H2Driver
-  val database = profile.simple.Database.forURL("jdbc:h2:mem:slick-demo;DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
+  val profile = Drivers.h2.slick
+  val database = profile.simple.Database.forURL("jdbc:h2:mem:slick-demo;DB_CLOSE_DELAY=-1", driver = Drivers.h2.jdbc)
 }
 
 /** Data access layer */
