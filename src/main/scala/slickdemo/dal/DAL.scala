@@ -13,7 +13,7 @@ object Drivers {
   case class Driver(slick: scala.slick.driver.ExtendedProfile, jdbc: String)
 
   val mysql = Driver(scala.slick.driver.MySQLDriver, "com.mysql.jdbc.Driver")
-  val h2 = Driver(scala.slick.driver.H2Driver, "com.mysql.jdbc.Driver")
+  val h2 = Driver(scala.slick.driver.H2Driver, "org.h2.Driver")
   val postgresql=Driver(scala.slick.driver.PostgresDriver, "org.postgresql.Driver")
   val access=Driver(scala.slick.driver.AccessDriver, "sun.jdbc.odbc.JdbcOdbcDriver")
   val sqlserver=Driver(scala.slick.driver.SQLServerDriver, "net.sourceforge.jtds.jdbc.Driver")
@@ -72,8 +72,6 @@ object DAL {
     dateTime => new Date(dateTime.getMillis),
     date => new DateTime(date)
   )
-
-
   // TODO this shouldn't be here
   lazy val schema: List[Table[_]] = List(Authors,Books, BookAuthors, Persons)
 }
