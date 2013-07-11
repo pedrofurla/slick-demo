@@ -32,7 +32,7 @@ object ApplicationBuild extends Build {
       "joda-time" % "joda-time" % "2.2",
       "org.joda" % "joda-convert" % "1.3.1",
       // -- JDBC
-      "com.h2database" % "h2" % "1.3.166",
+      "com.h2database" % "h2" % "1.3.172",
       "mysql" % "mysql-connector-java" % "5.1.12",
       "org.xerial" % "sqlite-jdbc" % "3.7.2"
     )
