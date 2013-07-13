@@ -58,12 +58,15 @@ object AdHocQueries extends App {
     println("Average Age: "+inSession { (Persons.all.map { p1 => (ageNow(p1.birthday)) }).avg.run })
   }
 
-  /*debugExpr {
+  println("Authors and how many works")
+  debugExpr {
     println(inSession {
       (for{
         ba <- BookAuthors.all;
-        a <- ba.authorFk } yield (ba,a)) groupBy { case (ba,a) => a.id } map { case (x,y) => (x,y) } list
-      //BookAuthors.all.groupBy( _.authorId ).map( x => (x._1,x._2.length) ).list } mkString "\n")
+        a <- ba.authorFk } yield (ba,a)) groupBy {
+          case (ba,a) => (a.id,a.name)
+      } map { case ((id,name),y) => (name,id.count) } list
+
     })
-  }*/
+  }
 }

@@ -59,7 +59,7 @@ object SqlQueries extends App {
   println(aPerson)
 
   import Q.interpolation
-
+  def personById(id:Long) = sql"select * from person where id=$id".as[Person]
   // sqlu the update/delete/dml version of sql
 
   inSession { println(s"Same person: ${aPerson map {p => personById(p.id.get).first }}") }
