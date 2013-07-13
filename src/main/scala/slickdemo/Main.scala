@@ -3,14 +3,11 @@ package slickdemo
 import dal._
 import DAL._
 import dataLayer.profile.simple._
-import org.joda.time.DateTime
-
 
 object Main {
 
+  // TODO move to a utils-like place
   def printSpacer = println("---------------------")
-
-
 
   def main(args: Array[String]): Unit = {
 

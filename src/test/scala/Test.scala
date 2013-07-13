@@ -8,7 +8,7 @@ class TemplateForASpec extends Specification {
     "someMethod " should { // TODO Still misses many tests
 
       "do something" in {
-        ???; true
+        Main.main(Array.empty); true
       }
 
     }
