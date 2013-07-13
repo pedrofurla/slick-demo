@@ -38,7 +38,7 @@ class H2FileLayer extends DataLayer {
 
 class H2Layer extends DataLayer {
   val profile = Drivers.h2.slick
-  val database = profile.simple.Database.forURL("jdbc:h2:mem:slick-demo;DB_CLOSE_DELAY=-1", driver = Drivers.h2.jdbc)
+  val database = profile.simple.Database.forURL("jdbc:h2:mem:slick-demo;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=FALSE", driver = Drivers.h2.jdbc)
 }
 
 /** Data access layer */
@@ -51,7 +51,7 @@ object DAL {
   }
 
   type ID = Int
-  type PK = Option[Int]
+  type PK = Option[ID]
   type SINTERVAL = (java.sql.Date, java.sql.Date)
   type SDATE = java.sql.Date
   type JDATE = org.joda.time.DateTime
@@ -67,6 +67,8 @@ object DAL {
 
   import dataLayer.profile.simple._
   import org.joda.time._
+
+  def dateTime(year: Int, month: Int, day: Int) = new DateTime(year, month, day, 0, 0, 0)
 
   implicit def date2dateTime = MappedTypeMapper.base[DateTime, Date](
     dateTime => new Date(dateTime.getMillis),

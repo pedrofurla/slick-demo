@@ -54,9 +54,8 @@ object Macros {
     val const=c.Expr[String](Literal(Constant(portion)))
 
     reify {
-      val x:A = expr.splice
       println(const.splice)
-      x
+      expr.splice
     }
   }
 }
