@@ -2,6 +2,7 @@ package slickdemo.dal
 
 import scala.slick.session.Session
 import java.sql.Date
+import slickdemo.Data
 
 trait DataLayer {
   val profile: scala.slick.driver.ExtendedProfile
@@ -14,9 +15,9 @@ object Drivers {
 
   val mysql = Driver(scala.slick.driver.MySQLDriver, "com.mysql.jdbc.Driver")
   val h2 = Driver(scala.slick.driver.H2Driver, "org.h2.Driver")
-  val postgresql=Driver(scala.slick.driver.PostgresDriver, "org.postgresql.Driver")
-  val access=Driver(scala.slick.driver.AccessDriver, "sun.jdbc.odbc.JdbcOdbcDriver")
-  val sqlserver=Driver(scala.slick.driver.SQLServerDriver, "net.sourceforge.jtds.jdbc.Driver")
+  val postgresql = Driver(scala.slick.driver.PostgresDriver, "org.postgresql.Driver")
+  val access = Driver(scala.slick.driver.AccessDriver, "sun.jdbc.odbc.JdbcOdbcDriver")
+  val sqlserver = Driver(scala.slick.driver.SQLServerDriver, "net.sourceforge.jtds.jdbc.Driver")
   // Todo Missing:
   // sqlite
   // hsqldb
@@ -41,12 +42,12 @@ class H2Layer extends DataLayer {
   val database = profile.simple.Database.forURL("jdbc:h2:mem:slick-demo;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=FALSE", driver = Drivers.h2.jdbc)
 }
 
-/** Data access layer */
+/** Data access layer - warning: it's full of utility here only to prevent one more import - silly me...*/
 object DAL {
   val dataLayer: DataLayer = if (System.getProperty("MYSQL_ENV") == null || System.getProperty("MYSQL_PORT") != null) {
     //new MysqlLayer
     new H2Layer
-  } else  {
+  } else {
     new H2Layer
   }
 
@@ -65,16 +66,39 @@ object DAL {
 
   //todo stuff that should probably be elsewhere
 
-  import dataLayer.profile.simple._
   import org.joda.time._
-
   def dateTime(year: Int, month: Int, day: Int) = new DateTime(year, month, day, 0, 0, 0)
 
+  import dataLayer.profile.simple._
+  /* Custom data types usage */
   implicit def date2dateTime = MappedTypeMapper.base[DateTime, Date](
     dateTime => new Date(dateTime.getMillis),
     date => new DateTime(date)
   )
-  // TODO this shouldn't be here
-  lazy val schema: List[Table[_]] = List(Authors,Books, BookAuthors, Persons)
+
+  import scala.slick.lifted.{ConstColumn, SimpleFunction, Column}
+  /* Basic usage of custom functions -- This instance is specific of H2, it's possible it will work with MySql */
+  def diffYear(a: Column[JDATE], b: Column[JDATE]) = SimpleFunction[Int]("DATEDIFF").apply(Seq(ConstColumn("MONTH"), a, b))
+  def yearsFromNow(c: Column[JDATE]) = diffYear(c, DateTime.now) / 12
+  def dayOfWeek(c: Column[JDATE]) = SimpleFunction[String]("DAYNAME").apply(Seq(c))
+
+  lazy val schema: List[Table[_]] = List(Authors, Books, BookAuthors, Persons)
+
+  private[this] var ready = false
+  def init = {
+    if (!ready) {
+      createDb
+      Data.insertBooks
+      Data.insertPersons
+      ready = true
+    }
+  }
+
+  def createDb = inSession {
+    schema foreach { _.ddl.create }
+    println("Database created")
+  }
+
+  def printSpacer(title:String="") = println("\n---------- "+title+" ----------")
 }
  

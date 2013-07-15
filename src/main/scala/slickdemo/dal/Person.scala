@@ -27,7 +27,6 @@ object Persons extends BaseTable[Person]("person") {
 
   def byId = equalBy { _.id }
 
-  import java.sql.Date
   val eighteenYearsMillis = 1000 * 60 * 60 * 24 * 365 * 18 // millesecs in 18 years
   def adulthoodTime = new DateTime(now.getTime - eighteenYearsMillis)
 

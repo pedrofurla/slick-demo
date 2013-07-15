@@ -80,6 +80,7 @@ object Books extends BaseTable[Book]("book") {
         case ((a, ba), b) => a.id === ba.authorId && b.id === ba.authorId
       }
     } yield b
+
 }
 
 object Authors extends BaseTable[Author]("author") {

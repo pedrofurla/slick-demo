@@ -14,14 +14,16 @@ import org.joda.time.DateTime
  */
 object AdHocQueries extends App {
 
-  import scala.slick.lifted._
-  import scala.slick.ast.{Node, Library}
-  import scala.slick.lifted.Column
+
   import scala.language.implicitConversions
   import scala.language.postfixOps
 
-  Main.init
+  init
 
+  /*printSpacer("Operators in customs data types")
+  import scala.slick.lifted._
+  import scala.slick.ast.{Node, Library}
+  import scala.slick.lifted.Column
   class DateColumnExtensionMethods[B1, P1](val c: Column[P1]) extends AnyVal with ExtensionMethods[B1, P1] {
     def -[P2, R](e: Column[P2])(implicit om: o#arg[B1, P2]#to[B1, R]) =
       om(Library.-.column[B1](n, Node(e)))
@@ -34,31 +36,28 @@ object AdHocQueries extends App {
     println(
       { for {p1 <- Persons.all if p1.id === 1
              p2 <- Persons.all if p2.id === 2} yield ((p1.birthday - p2.birthday).asColumnOf[Int])
-      } first)}
+      } first)}*/
 
 
   import Macros._
 
+  printSpacer("Day of the week persons were born")
   debugExpr {
-    def dayOfWeek(c: Column[JDATE]) = SimpleFunction[Int]("DAY_OF_WEEK").apply(Seq(c))
     println(inSession { (Persons.all map { p1 => (p1.fullName, dayOfWeek(p1.birthday)) }) list } mkString "\n")
   }
-  Main.printSpacer
 
+  printSpacer("Ages of all persons")
   debugExpr {
-    def diffYear(a: Column[JDATE], b: Column[JDATE]) = SimpleFunction[Int]("DATEDIFF").apply(Seq(ConstColumn("MONTH"), a, b))
     println(inSession { (Persons.all map { p1 => (p1.fullName, diffYear(p1.birthday, DateTime.now) / 12) }) list } mkString "\n")
   }
-  Main.printSpacer
 
+  printSpacer("Persons and their ages")
   debugExpr {
-    def diffYear(a: Column[JDATE], b: Column[JDATE]) = SimpleFunction[Int]("DATEDIFF").apply(Seq(ConstColumn("MONTH"), a, b))
-    def ageNow(c: Column[JDATE]) = diffYear(c, DateTime.now) / 12
-    println(inSession { (Persons.all map { p1 => (p1.fullName, ageNow(p1.birthday)) }).list } mkString "\n")
-    println("Average Age: "+inSession { (Persons.all.map { p1 => (ageNow(p1.birthday)) }).avg.run })
+    println(inSession { (Persons.all map { p1 => (p1.fullName, yearsFromNow(p1.birthday)) }).list } mkString "\n")
+    println("Average Age: "+inSession { (Persons.all.map { p1 => (yearsFromNow(p1.birthday)) }).avg.run })
   }
 
-  println("Authors and how many works")
+  printSpacer("How many works each author produced")
   debugExpr {
     println(inSession {
       (for{
