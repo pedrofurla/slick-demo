@@ -25,7 +25,7 @@ object ApplicationBuild extends Build {
         url("http://repo.typesafe.com/typesafe/snapshots/"))(Resolver.ivyStylePatterns)
     ),
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2" % "2.1-SNAPSHOT" % "test",
+      "org.specs2" %% "specs2" % "2.1" % "test",
       "org.scala-lang" % "scala-reflect" % "2.10.2",
       "com.typesafe.slick" %% "slick" % "1.0.1",
       "org.slf4j" % "slf4j-nop" % "1.6.4",
