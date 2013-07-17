@@ -3,6 +3,7 @@ package slickdemo
 import dal._
 import DAL._
 import dataLayer.profile.simple._
+import Macros._
 
 object Main {
 
@@ -10,19 +11,25 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
-    printSpacer("Some queries and their translations")
+    printSpacer("Lifted embedding Slick basic quering")
+
+    println
+
+    printSpacer("Some lifted embedding Slick queries and their SQL translations")
     sqls
 
     printSpacer("All books")
-    inSession { println(Books.all.list mkString "\n") }
+    debugExpr{ inSession { println(Books.all.list mkString "\n") } }
 
     printSpacer("All persons")
-    inSession { println(Persons.all.list mkString "\n") }
+    debugExpr{ inSession { println(Persons.all.list mkString "\n") } }
 
-    println("Random ad hoc queries:")
-    inSession {
-      println("Younger person was born: " + Persons.map(_.birthday).max.run)
-      println("Older person was born: " + Persons.map(_.birthday).min.run)
+    printSpacer("Ad hoc queries:")
+    debugExpr {
+      inSession {
+        println("Younger person was born: " + Persons.map(_.birthday).max.run)
+        println("Older person was born: " + Persons.map(_.birthday).min.run)
+      }
     }
 
   }

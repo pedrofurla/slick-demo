@@ -20,6 +20,10 @@ object AdHocQueries extends App {
 
   init
 
+  printSpacer("Some lifted embedding Slick query examples")
+
+  println
+
   /*printSpacer("Operators in customs data types")
   import scala.slick.lifted._
   import scala.slick.ast.{Node, Library}

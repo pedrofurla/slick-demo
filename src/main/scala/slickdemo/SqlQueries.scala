@@ -24,6 +24,10 @@ object SqlQueries extends App {
 
   import Macros._
 
+  printSpacer("Basic Slick JDBC usage")
+
+  println
+
   printSpacer("Custom data type for parameters")
   debugExpr {
     implicit object SetJodaDateTime extends SetParameter[JDATE] {
