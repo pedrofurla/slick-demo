@@ -10,6 +10,9 @@ initialCommands in console :=
      |import slickdemo._
      |import slickdemo.Main._
      |import slickdemo.Macros._
+     |import scala.slick.jdbc.{GetResult, StaticQuery => Q}
+     |import scala.slick.jdbc.GetResult._
+     |import Q.interpolation
      |//val cm= reflect.runtime.currentMirror
      |//val u = cm.universe
      |//createDb
