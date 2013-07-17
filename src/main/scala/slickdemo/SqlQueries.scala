@@ -14,11 +14,11 @@ import org.joda.time.DateTime
  * User: pedrofurla
  * Date: 10/07/13
  * Time: 15:44
- * To change this template use File | Settings | File Templates.
  */
 object SqlQueries extends App {
 
   import scala.slick.jdbc.{GetResult, StaticQuery => Q}
+  import scala.slick.jdbc.GetResult._
 
   init
 
@@ -42,6 +42,13 @@ object SqlQueries extends App {
 
     inSession { stmt.execute }
   }
+
+  printSpacer("Extracting simple types")
+  debugExpr {
+    println("All persons names, notice the last name: ")
+    println { inSession { Q.queryNA[String]("select full_name from person").list } mkString ","  }
+  }
+
 
   // these source repetitions are annoying me
   implicit object SetJodaDateTime extends SetParameter[JDATE] {
@@ -84,22 +91,26 @@ object SqlQueries extends App {
   }
 
   printSpacer("Using string interpolator to create queries")
+
   debugExpr {
     import Q.interpolation
     def personById(id: Long) = sql"select * from person where id=$id".as[Person]
     // sqlu is the update/delete/dml version of sql interpolator
 
-    inSession { println(s"Same person: ${personById(3).first}}") }
+    inSession { println(s"Some person: ${personById(3).first}}") }
+  }
 
-    println
+  println
 
+  debugExpr {
+    import Q.interpolation
     println("Authors and how many works produced by each: ")
     inSession {
       sql"""
-        select count(a.id), a.name
+        select a.name, count(a.id)
         from book_authors ba inner join author a on ba.author_id = a.id
         group by a.id, a.name order by a.name
-      """.as[(Long, String)].list foreach println
+      """.as[(String, Long)].list foreach println
     }
   }
 
