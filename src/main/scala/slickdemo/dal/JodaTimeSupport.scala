@@ -9,7 +9,7 @@ import java.sql.Date
  * Time: 23:29
  */
 trait JodaTimeSupport { this: DAL.type =>
-  import dataLayer.profile.simple._
+  import dataLayer.simple._
   import org.joda.time._
 
   def dateTime(year: Int, month: Int, day: Int) = new DateTime(year, month, day, 0, 0, 0)

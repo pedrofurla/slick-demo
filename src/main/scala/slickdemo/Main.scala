@@ -2,7 +2,7 @@ package slickdemo
 
 import dal._
 import DAL._
-import dataLayer.profile.simple._
+import dataLayer.simple._
 import Macros._
 
 object Main {

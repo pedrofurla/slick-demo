@@ -6,6 +6,8 @@ import slickdemo.Data
 
 trait DataLayer {
   val profile: scala.slick.driver.ExtendedProfile
+  // todo, simple is a horrible name. needs one better
+  lazy val simple:profile.SimpleQL = profile.simple // lazy here to avoid init problems...
   val database: scala.slick.session.Database
 }
 
@@ -58,7 +60,7 @@ object DAL extends DateTimeFunctions with JodaTimeSupport {
   type JDATE = org.joda.time.DateTime
   type JINTERVAL = org.joda.time.Interval
 
-  implicit def slickSession: Session = dataLayer.profile.simple.Database.threadLocalSession
+  implicit def slickSession: Session = dataLayer.simple.Database.threadLocalSession
 
   def inSession[T](t: => T): T = dataLayer.database.withSession[T] { t }
 
@@ -66,7 +68,7 @@ object DAL extends DateTimeFunctions with JodaTimeSupport {
 
   //todo stuff that should probably be elsewhere
 
-  import dataLayer.profile.simple._
+  import dataLayer.simple._
 
   lazy val schema: List[Table[_]] = List(Authors, Books, BookAuthors, Persons)
 

@@ -2,7 +2,7 @@ package slickdemo
 
 import dal._
 import DAL._
-import dataLayer.profile.simple._
+import dataLayer.simple._
 import org.joda.time.DateTime
 
 /**
@@ -10,7 +10,6 @@ import org.joda.time.DateTime
  * User: pedrofurla
  * Date: 10/07/13
  * Time: 04:31
- * To change this template use File | Settings | File Templates.
  */
 object AdHocQueries extends App {
 

@@ -7,7 +7,7 @@ import dal._
 import scala.slick.jdbc.SetParameter
 import scala.slick.session.{PositionedResult, PositionedParameters}
 import org.joda.time.DateTime
-//import dataLayer.profile.simple._
+//import dataLayer.simple._
 
 /**
  * Created with IntelliJ IDEA.
