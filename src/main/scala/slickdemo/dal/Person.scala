@@ -20,20 +20,17 @@ object Persons extends BaseTable[Person]("person") {
   def credentials = login ~ password
   def personal = fullName ~ birthday
 
-  // bad     Projection4[Option[DAL.ID], Projection2[String, String], String, DAL.JDATE]
-  // all map { _.allData } :
-  //   Query[Projection4[Option[ID], Projection2[String, String], String, DAL.JDATE], (Option[ID], Projection2[String, String], String, JDATE)]
-  def allData = id.? ~: credentials ~: personal
+  // bogun won't compile
+  //def allData = id.? ~ (credentials ~: personal)
+  //def noId2 = credentials ~: personal
 
   def noId = fullName ~ birthday ~ login ~ password
-
   // good, Projection5
   def allData2 = id.? ~: noId
+  allData2
 
-  // Tuple5
-  def allData3 = (id.?, fullName, birthday, login, password)
-
-
+  import scala.slick.lifted._
+  def allData3 = new Projection5(id.?, fullName, birthday, login, password)
 
   def autoInc = * returning id.? into {
     case (Person(_, a, b,c ,d), id) => Person(id, a, b, c, d)
