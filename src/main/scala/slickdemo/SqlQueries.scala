@@ -2,7 +2,7 @@ package slickdemo
 
 //import dal._
 
-import dal.DAL._
+import dal.SlickSupport._
 import dal._
 import scala.slick.jdbc.SetParameter
 import scala.slick.session.{PositionedResult, PositionedParameters}

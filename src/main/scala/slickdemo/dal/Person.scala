@@ -1,7 +1,7 @@
 package slickdemo.dal
 
-import DAL._
-import dataLayer.simple._
+import SlickSupport._
+import dataLayer.ql._
 import org.joda.time.DateTime
 
 

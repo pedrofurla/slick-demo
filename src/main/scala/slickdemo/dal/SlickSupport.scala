@@ -4,16 +4,24 @@ import scala.slick.session.Session
 import java.sql.Date
 import slickdemo.Data
 
-trait DataLayer {
-  val profile: scala.slick.driver.ExtendedProfile
-  // todo, simple is a horrible name. needs one better
-  lazy val simple:profile.SimpleQL = profile.simple // lazy here to avoid init problems...
+trait SlickSupport {
+  val driver: scala.slick.driver.ExtendedDriver
+  /**
+    The class scala.slickDriver.driver.BasicProfile.SimpleQL aggregates
+      - Table
+      - Session
+      - Database
+      - scala.slickDriver.driver.BasicProfile.Implicits
+
+    These are the most the entry points for clients of Slick.
+  */
+  lazy val ql:driver.SimpleQL = driver.simple // lazy here to avoid init problems...
   val database: scala.slick.session.Database
 }
 
 object Drivers {
 
-  case class Driver(slick: scala.slick.driver.ExtendedProfile, jdbc: String)
+  case class Driver(slickDriver: scala.slick.driver.ExtendedDriver, jdbc: String)
 
   val mysql = Driver(scala.slick.driver.MySQLDriver, "com.mysql.jdbc.Driver")
   val h2 = Driver(scala.slick.driver.H2Driver, "org.h2.Driver")
@@ -29,29 +37,25 @@ object Drivers {
 
 }
 
-class MysqlLayer extends DataLayer {
-  val profile = Drivers.mysql.slick
-  val database = profile.simple.Database.forURL(s"jdbc:mysql://localhost/slick-demo?user=root", driver = Drivers.mysql.jdbc)
+class MysqlSupport extends SlickSupport {
+  val driver = Drivers.mysql.slickDriver
+  val database = driver.simple.Database.forURL(s"jdbc:mysql://localhost/slickDriver-demo?user=root", driver = Drivers.mysql.jdbc)
 }
 
-class H2FileLayer extends DataLayer {
-  val profile = Drivers.h2.slick
-  val database = profile.simple.Database.forURL("jdbc:h2:tcp://localhost/db/slick-demo;IFEXISTS=TRUE", driver = Drivers.h2.jdbc)
+class H2FileSupport extends SlickSupport {
+  val driver = Drivers.h2.slickDriver
+  val database = driver.simple.Database.forURL("jdbc:h2:tcp://localhost/db/slickDriver-demo;IFEXISTS=TRUE", driver = Drivers.h2.jdbc)
 }
 
-class H2Layer extends DataLayer {
-  val profile = Drivers.h2.slick
-  val database = profile.simple.Database.forURL("jdbc:h2:mem:slick-demo;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=FALSE", driver = Drivers.h2.jdbc)
+class H2Support extends SlickSupport {
+  val driver = Drivers.h2.slickDriver
+  val database = driver.simple.Database.forURL("jdbc:h2:mem:slickDriver-demo;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=FALSE", driver = Drivers.h2.jdbc)
 }
 
 /** Data access layer - warning: it's full of utility here only to prevent more imports - silly me...*/
-object DAL extends DateTimeFunctions with JodaTimeSupport {
-  val dataLayer: DataLayer = if (System.getProperty("MYSQL_ENV") == null || System.getProperty("MYSQL_PORT") != null) {
-    //new MysqlLayer
-    new H2Layer
-  } else {
-    new H2Layer
-  }
+object SlickSupport extends DateTimeFunctions with JodaTimeSupport {
+  val dataLayer: SlickSupport = new H2Support
+
 
   type ID = Int
   type PK = Option[ID]
@@ -60,7 +64,7 @@ object DAL extends DateTimeFunctions with JodaTimeSupport {
   type JDATE = org.joda.time.DateTime
   type JINTERVAL = org.joda.time.Interval
 
-  implicit def slickSession: Session = dataLayer.simple.Database.threadLocalSession
+  implicit def slickSession: Session = dataLayer.ql.Database.threadLocalSession
 
   def inSession[T](t: => T): T = dataLayer.database.withSession[T] { t }
 
@@ -68,9 +72,9 @@ object DAL extends DateTimeFunctions with JodaTimeSupport {
 
   //todo stuff that should probably be elsewhere
 
-  import dataLayer.simple._
+  import dataLayer.ql._
 
-  lazy val schema: List[Table[_]] = List(Authors, Books, BookAuthors, Persons)
+  lazy val schemas: List[Table[_]] = List(Authors, Books, BookAuthors, Persons)
 
   private[this] var ready = false
   def init = {
@@ -83,7 +87,7 @@ object DAL extends DateTimeFunctions with JodaTimeSupport {
   }
 
   def createDb = inSession {
-    schema foreach { _.ddl.create }
+    schemas foreach { _.ddl.create }
     println("Database created")
   }
 

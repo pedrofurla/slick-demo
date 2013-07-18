@@ -1,8 +1,8 @@
 package slickdemo
 
 import dal._
-import DAL._
-import dataLayer.simple._
+import SlickSupport._
+import dataLayer.ql._
 import Macros._
 
 object Main {

@@ -6,8 +6,8 @@ package slickdemo.dal
  * Date: 17/07/13
  * Time: 06:36
  */
-trait DateTimeFunctions { this: DAL.type =>
-  import dataLayer.simple._
+trait DateTimeFunctions { this: SlickSupport.type =>
+  import dataLayer.ql._
 
   import org.joda.time._
   import scala.slick.lifted.{ConstColumn, SimpleFunction, Column}

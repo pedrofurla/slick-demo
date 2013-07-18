@@ -1,7 +1,7 @@
 package slickdemo.dal
 
-import slickdemo.dal.DAL._
-import dataLayer.simple._
+import slickdemo.dal.SlickSupport._
+import dataLayer.ql._
 
 case class Book(id: PK, title: String, synopsis: String) {
   //

@@ -1,8 +1,8 @@
 package slickdemo
 
 import dal._
-import DAL._
-import dataLayer.simple._
+import SlickSupport._
+import dataLayer.ql._
 import org.joda.time.DateTime
 
 /**
@@ -24,9 +24,9 @@ object AdHocQueries extends App {
   println
 
   /*printSpacer("Operators in customs data types")
-  import scala.slick.lifted._
-  import scala.slick.ast.{Node, Library}
-  import scala.slick.lifted.Column
+  import scala.slickDriver.lifted._
+  import scala.slickDriver.ast.{Node, Library}
+  import scala.slickDriver.lifted.Column
   class DateColumnExtensionMethods[B1, P1](val c: Column[P1]) extends AnyVal with ExtensionMethods[B1, P1] {
     def -[P2, R](e: Column[P2])(implicit om: o#arg[B1, P2]#to[B1, R]) =
       om(Library.-.column[B1](n, Node(e)))
