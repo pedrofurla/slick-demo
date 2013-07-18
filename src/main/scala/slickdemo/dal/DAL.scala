@@ -42,8 +42,8 @@ class H2Layer extends DataLayer {
   val database = profile.simple.Database.forURL("jdbc:h2:mem:slick-demo;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=FALSE", driver = Drivers.h2.jdbc)
 }
 
-/** Data access layer - warning: it's full of utility here only to prevent one more import - silly me...*/
-object DAL {
+/** Data access layer - warning: it's full of utility here only to prevent more imports - silly me...*/
+object DAL extends DateTimeFunctions with JodaTimeSupport {
   val dataLayer: DataLayer = if (System.getProperty("MYSQL_ENV") == null || System.getProperty("MYSQL_PORT") != null) {
     //new MysqlLayer
     new H2Layer
@@ -66,21 +66,7 @@ object DAL {
 
   //todo stuff that should probably be elsewhere
 
-  import org.joda.time._
-  def dateTime(year: Int, month: Int, day: Int) = new DateTime(year, month, day, 0, 0, 0)
-
   import dataLayer.profile.simple._
-  /* Custom data types usage */
-  implicit def date2dateTime = MappedTypeMapper.base[DateTime, Date](
-    dateTime => new Date(dateTime.getMillis),
-    date => new DateTime(date)
-  )
-
-  import scala.slick.lifted.{ConstColumn, SimpleFunction, Column}
-  /* Basic usage of custom functions -- This instance is specific of H2, it's possible it will work with MySql */
-  def diffYear(a: Column[JDATE], b: Column[JDATE]) = SimpleFunction[Int]("DATEDIFF").apply(Seq(ConstColumn("MONTH"), a, b))
-  def yearsFromNow(c: Column[JDATE]) = diffYear(c, DateTime.now) / 12
-  def dayOfWeek(c: Column[JDATE]) = SimpleFunction[String]("DAYNAME").apply(Seq(c))
 
   lazy val schema: List[Table[_]] = List(Authors, Books, BookAuthors, Persons)
 
@@ -101,4 +87,4 @@ object DAL {
 
   def printSpacer(title:String="") = println("\n---------- "+title+" ----------")
 }
- 
+

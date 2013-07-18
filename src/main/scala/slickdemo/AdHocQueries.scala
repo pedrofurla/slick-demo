@@ -47,7 +47,7 @@ object AdHocQueries extends App {
 
   printSpacer("Day of the week persons were born")
   debugExpr {
-    println(inSession { (Persons.all map { p1 => (p1.fullName, dayOfWeek(p1.birthday)) }) list } mkString "\n")
+    println(inSession { (Persons.all map { p1 => (p1.fullName, dayOfWeekName(p1.birthday)) }) list } mkString "\n")
   }
 
   printSpacer("Ages of all persons")
