@@ -37,9 +37,15 @@ object Books extends BaseTable[Book]("book") {
   def byId = equalBy { _.id }
 
   // todo check Authors.likeName todo
-  def likeTitle(t: String) = for { b <- all if b.title.toLowerCase like "%" + t.toLowerCase + "%"  } yield b
+  def likeTitle(t: String) = for { b <- all if b.title.toLowerCase like "%" ++ t.toLowerCase ++ "%"  } yield b
 
-  def likeTitle2(t: Column[String]) = for { b <- all if b.title.toLowerCase like "%" + t.toLowerCase + "%"  } yield b
+  def likeTitle0(t: Column[String]) = for { b <- all if b.title.toLowerCase like "%" + t.toLowerCase + "%"  } yield b
+
+  import scala.slick.lifted.{ConstColumn => CC}
+
+  def likeTitle2(t: Column[String]) = for { b <- all if b.title.toLowerCase like CC("%") ++ t.toLowerCase ++ CC("%")  } yield b
+
+  //def likeTitle3(t: Column[String]) = for { b <- all if b.title.toLowerCase like "%" ++ t.toLowerCase ++ "%"  } yield b
 
   def titleLike(pattern:Column[String]):Column[Boolean] = title.toLowerCase like pattern.toLowerCase
 
