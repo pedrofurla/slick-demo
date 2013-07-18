@@ -54,7 +54,7 @@ class H2Support extends SlickSupport {
 
 /** Data access layer - warning: it's full of utility here only to prevent more imports - silly me...*/
 object SlickSupport extends DateTimeFunctions with JodaTimeSupport {
-  val dataLayer: SlickSupport = new H2Support
+  val slickSupport: SlickSupport = new H2Support
 
 
   type ID = Int
@@ -64,15 +64,16 @@ object SlickSupport extends DateTimeFunctions with JodaTimeSupport {
   type JDATE = org.joda.time.DateTime
   type JINTERVAL = org.joda.time.Interval
 
-  implicit def slickSession: Session = dataLayer.ql.Database.threadLocalSession
+  implicit def slickSession: Session = slickSupport.ql.Database.threadLocalSession
 
-  def inSession[T](t: => T): T = dataLayer.database.withSession[T] { t }
+  def inSession[T](t: => T): T = slickSupport.database.withSession[T] { t }
 
-  def withSession[T](t: Session => T): T = dataLayer.database.withSession[T] { implicit s: Session => t(s) }
+  def withSession[T](t: Session => T): T = slickSupport.database.withSession[T] { implicit s: Session => t(s) }
 
   //todo stuff that should probably be elsewhere
 
-  import dataLayer.ql._
+  import slickSupport.ql._
+  import slickdemo.domain._
 
   lazy val schemas: List[Table[_]] = List(Authors, Books, BookAuthors, Persons)
 

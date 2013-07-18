@@ -1,8 +1,9 @@
 package slickdemo
 
 import dal._
+import domain._
 import SlickSupport._
-import dataLayer.ql._
+import slickSupport.ql._
 import org.joda.time.DateTime
 
 /**

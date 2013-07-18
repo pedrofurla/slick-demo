@@ -1,7 +1,7 @@
 package slickdemo.dal
 
 import SlickSupport._
-import dataLayer.ql._
+import slickSupport.ql._
 
 abstract class BaseTable[T](_schemaName: Option[String], _tableName: String) extends Table[T](_schemaName, _tableName) {
   def this(_tableName: String) = this(None, _tableName)

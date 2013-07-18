@@ -1,8 +1,8 @@
 package slickdemo
 
-import slickdemo.dal._
+import domain._
 import slickdemo.dal.SlickSupport._
-import slickdemo.dal.SlickSupport.dataLayer.ql._
+import slickdemo.dal.SlickSupport.slickSupport.ql._
 import scala.slick.lifted.Parameters
 import scala.slick.driver.BasicQueryTemplate
 

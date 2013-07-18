@@ -1,7 +1,7 @@
 package slickdemo
 
-import slickdemo.dal._
-import slickdemo.dal.SlickSupport._
+import domain._
+import dal.SlickSupport._
 
 object Data {
 

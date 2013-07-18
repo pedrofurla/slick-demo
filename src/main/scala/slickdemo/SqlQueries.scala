@@ -1,13 +1,10 @@
 package slickdemo
 
-//import dal._
-
 import dal.SlickSupport._
-import dal._
+import domain._
 import scala.slick.jdbc.SetParameter
 import scala.slick.session.{PositionedResult, PositionedParameters}
 import org.joda.time.DateTime
-//import dataLayer.simple._
 
 /**
  * Created with IntelliJ IDEA.
