@@ -31,16 +31,10 @@ object ParameterQueries extends App {
     println(Books.likeTitle("Scala").list mkString "\n")
   }
 
-  printSpacer("Scala books - likeTite2")
-  println(Books.likeTitle2(ConstColumn("Scala")).selectStatement)
-  inSession {
-    println(Books.likeTitle2(ConstColumn("Scala")).list mkString "\n")
-  }
-
 
   printSpacer("Parameter to column:")
   // Too much typing to an outcome that is basically a column replaced with a parameter.'
-  val ptitle: BasicQueryTemplate[String, Book] = for (x <- Parameters[String]; b <- Books.likeTitle2(x)) yield b
+  val ptitle: BasicQueryTemplate[String, Book] = for (x <- Parameters[String]; b <- Books.likeTitle(x)) yield b
   println(s"Select statement=${ptitle.selectStatement}")
 
   printSpacer()
@@ -61,7 +55,7 @@ object ParameterQueries extends App {
 
   printSpacer()
   // A little better and with the right type
-  val ptitle3: BasicQueryTemplate[String, Book] = Parameters[String] flatMap { Books.likeTitle2 _ }
+  val ptitle3: BasicQueryTemplate[String, Book] = Parameters[String] flatMap { Books.likeTitle _ }
   println(s"Select statement=${ptitle3.selectStatement}")
   inSession {
     println(ptitle3("Akka").list mkString "\n")
@@ -74,11 +68,11 @@ object ParameterQueries extends App {
 
   printSpacer()
   println("All Scala:")
-  inSession { println(Books.likeTitle2("Scala").map { _.* }.list mkString "\n") }
+  inSession { println(Books.likeTitle("Scala").map { _.* }.list mkString "\n") }
 
   printSpacer()
   // Shows something is wrong when trying to give a parameter to a function functions that expects a column
-  val queryLikeTitle = for (p <- Parameters[String]; b <- Books.likeTitle2(p)) yield b
+  val queryLikeTitle = for (p <- Parameters[String]; b <- Books.likeTitle(p)) yield b
   inSession { println(queryLikeTitle("Scala").list mkString "\n") }
 
 

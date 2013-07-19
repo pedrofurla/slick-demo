@@ -1,10 +1,9 @@
 package slickdemo.dal
 
 import scala.slick.session.Session
-import java.sql.Date
 import slickdemo.Data
 
-trait SlickSupport {
+trait SlickSupportTemplate {
   val driver: scala.slick.driver.ExtendedDriver
   /**
     The class scala.slickDriver.driver.BasicProfile.SimpleQL aggregates
@@ -20,7 +19,6 @@ trait SlickSupport {
 }
 
 object Drivers {
-
   case class Driver(slickDriver: scala.slick.driver.ExtendedDriver, jdbc: String)
 
   val mysql = Driver(scala.slick.driver.MySQLDriver, "com.mysql.jdbc.Driver")
@@ -37,27 +35,26 @@ object Drivers {
 
 }
 
-class MysqlSupport extends SlickSupport {
+class MysqlSupport extends SlickSupportTemplate {
   val driver = Drivers.mysql.slickDriver
   val database = driver.simple.Database.forURL(s"jdbc:mysql://localhost/slickDriver-demo?user=root", driver = Drivers.mysql.jdbc)
 }
 
-class H2FileSupport extends SlickSupport {
+class H2FileSupport extends SlickSupportTemplate {
   val driver = Drivers.h2.slickDriver
   val database = driver.simple.Database.forURL("jdbc:h2:tcp://localhost/db/slickDriver-demo;IFEXISTS=TRUE", driver = Drivers.h2.jdbc)
 }
 
-class H2Support extends SlickSupport {
+class H2Support extends SlickSupportTemplate {
   val driver = Drivers.h2.slickDriver
   val database = driver.simple.Database.forURL("jdbc:h2:mem:slickDriver-demo;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE;DATABASE_TO_UPPER=FALSE", driver = Drivers.h2.jdbc)
 }
 
 /** Data access layer - warning: it's full of utility here only to prevent more imports - silly me...*/
-object SlickSupport extends DateTimeFunctions with JodaTimeSupport {
-  val slickSupport: SlickSupport = new H2Support
+trait SlickSupport extends DateTimeFunctions with JodaTimeSupport {
+  val slickSupport: SlickSupportTemplate
 
-
-  type ID = Int
+  type ID = Long
   type PK = Option[ID]
   type SINTERVAL = (java.sql.Date, java.sql.Date)
   type SDATE = java.sql.Date
@@ -72,10 +69,9 @@ object SlickSupport extends DateTimeFunctions with JodaTimeSupport {
 
   //todo stuff that should probably be elsewhere
 
-  import slickSupport.ql._
   import slickdemo.domain._
 
-  lazy val schemas: List[Table[_]] = List(Authors, Books, BookAuthors, Persons)
+  lazy val schemas: List[BaseTable[_]] = List(Authors, Books, BookAuthors, Persons)
 
   private[this] var ready = false
   def init = {
@@ -88,10 +84,15 @@ object SlickSupport extends DateTimeFunctions with JodaTimeSupport {
   }
 
   def createDb = inSession {
+    import slickSupport.ql._
     schemas foreach { _.ddl.create }
     println("Database created")
   }
 
   def printSpacer(title:String="") = println("\n---------- "+title+" ----------")
+}
+
+object SlickSupport extends SlickSupport {
+  val slickSupport = new H2Support
 }
 

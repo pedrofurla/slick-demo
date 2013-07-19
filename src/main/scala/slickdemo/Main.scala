@@ -44,7 +44,7 @@ object Main {
 
     val qs = List(
       sourceExpr(Books.likeTitle("Some title").map { _.* }.selectStatement),
-      sourceExpr(Books.byAuthor(999).map { _.* }.selectStatement),
+      sourceExpr(Books.byAuthor(999L).map { _.* }.selectStatement),
       sourceExpr(Authors.likeName("Some author").map { _.* }.selectStatement),
       sourceExpr(Authors.byBookName("Some title").map { _.* }.selectStatement)
     )

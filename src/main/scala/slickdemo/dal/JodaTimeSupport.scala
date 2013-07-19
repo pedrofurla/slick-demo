@@ -8,7 +8,7 @@ import java.sql.Date
  * Date: 17/07/13
  * Time: 23:29
  */
-trait JodaTimeSupport { this: SlickSupport.type =>
+trait JodaTimeSupport { this: SlickSupport =>
   import slickSupport.ql._
   import org.joda.time._
 

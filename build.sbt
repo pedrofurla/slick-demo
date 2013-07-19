@@ -4,10 +4,12 @@ name := "slick-demo"
 scalaVersion := "2.10.2"
 
 initialCommands in console :=
-  """|import slickdemo.dal._
-     |import DAL._
-     |import dataLayer.profile.simple._
-     |import slickdemo._
+  """|import slickdemo._
+     |import slickdemo.dal._
+     |import slickdemo.dal.SlickSupport
+     |import slickdemo.dal.SlickSupport._
+     |import slickdemo.dal.SlickSupport.slickSupport._
+     |import slickdemo.domain._
      |import slickdemo.Main._
      |import slickdemo.Macros._
      |import scala.slick.jdbc.{GetResult, StaticQuery => Q}

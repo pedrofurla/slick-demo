@@ -101,6 +101,16 @@ object SqlQueries extends App {
     inSession { println(s"Some person: ${personById(3).first}}") }
   }
 
+  debugExpr {
+    import Q.interpolation
+    def dates = sql"""
+      select
+        extract("YEAR" from birthday)||'-'||extract("MONTH" from birthday)||'-'||extract("DAY" from birthday)
+      from person""".as[String]
+
+    inSession { println(s"Birthdays: ${dates.list mkString ","}") }
+  }
+
   println
 
   debugExpr {

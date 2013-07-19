@@ -6,7 +6,7 @@ package slickdemo.dal
  * Date: 17/07/13
  * Time: 06:36
  */
-trait DateTimeFunctions { this: SlickSupport.type =>
+trait DateTimeFunctions { this: SlickSupport =>
   import slickSupport.ql._
 
   import org.joda.time._

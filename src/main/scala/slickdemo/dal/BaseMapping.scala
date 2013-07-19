@@ -26,6 +26,8 @@ abstract class BaseTable[T](_schemaName: Option[String], _tableName: String) ext
 
   def all = Query[this.type, T, this.type](this)
 
+  val wild = ConstColumn("%")
+
   import scala.slick.lifted._
 
   def equalBy[B: BaseTypeMapper](proj: this.type => Column[B]): B => Query[this.type, T] = {
